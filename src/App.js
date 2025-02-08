@@ -16,6 +16,8 @@ const App = () => {
   const apiKey = process.env.REACT_APP_GOOGLE_GENERATIVE_AI_KEY;
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const [keywordData, setKeywordData] = useState([]);
+  const [topVisitedIcons, setTopVisitedIcons] = useState([]);
 
   const sampleData = [
     ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#74E792', '#74E792', '#74E792'], // Green
@@ -37,13 +39,24 @@ const App = () => {
   ];
 
 
-  const [keywordData, setKeywordData] = useState([]);
 
   useEffect(() => {
     const fetchHistory = () => {
       if (chrome && chrome.history) {
         chrome.history.search({ text: '', startTime: 0, maxResults: 20 }, async (results) => {
           const historyData = results.map(item => ({ url: item.url, title: item.title || item.url }));
+
+          // Fetch favicons for the top 3 visited sites
+          const favicons = results.slice(0, 3).map(item => {
+            try {
+              const urlObj = new URL(item.url);
+              return `https://www.google.com/s2/favicons?sz=32&domain=${urlObj.hostname}`;
+            } catch {
+              return starImageBase64; // Fallback image if URL parsing fails
+            }
+          });
+
+          setTopVisitedIcons(favicons);
 
           // Send data to Gemini API
           const prompt = `Analyze the following browser history. Based on frequency, uniqueness of the topic, and content relevance, filter out unnecessary items. Provide 5 main topics with their summary and categorize them into: 0 (Development), 1 (Lifestyle), or 2 (Entertainment).
@@ -231,9 +244,9 @@ const App = () => {
             <BorderBox>
               <div style={titleStyle}>Top Visited</div>
               <div style={topVisitedContainerStyle}>
-                <img src={starImageBase64} alt="Visited 1" style={circleImageStyle} />
-                <img src={starImageBase64} alt="Visited 2" style={circleImageStyle} />
-                <img src={starImageBase64}s alt="Visited 3" style={circleImageStyle} />
+                {topVisitedIcons.map((icon, index) => (
+                  <img key={index} src={icon} alt={`Visited ${index + 1}`} style={circleImageStyle} />
+                ))}
               </div>
             </BorderBox>
             <img src={gifBase64} alt="Animation" style={{
