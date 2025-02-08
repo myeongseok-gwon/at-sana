@@ -34,7 +34,7 @@ const TimeTable = ({ rows, columns, data }) => {
       {data.flatMap((row, rowIndex) => [
         // 각 행 시작에 레이블 추가
         <div key={`label-${rowIndex}`} style={labelStyle}>
-          {String(6 + rowIndex).padStart(2, '0')}
+          {String(8 + rowIndex).padStart(2, '0')}
         </div>,
         // 기존 타임 블록 렌더링
         ...row.map((color, colIndex) => (
