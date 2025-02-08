@@ -20,21 +20,21 @@ const App = () => {
   const [topVisitedIcons, setTopVisitedIcons] = useState([]);
 
   const sampleData = [
-    ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#74E792', '#74E792', '#74E792'], // Green
-    ['#74E792', '#74E792', '#74E792', '#74E792', '#74E792', '#74E792'],
-    ['#74E792', '#74E792', '#74E792', '#74E792', '#74E792', '#74E792'],
+    ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#74E792', '#74E792', '#E0E0E0'], // Green
+    ['#74E792', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#74E792'],
+    ['#E0E0E0', '#74E792', '#E0E0E0', '#74E792', '#E0E0E0', '#74E792'],
     ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0'],
     ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#99DAFF', '#99DAFF', '#99DAFF'], // Cyan, Gray, Magenta
-    ['#99DAFF', '#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8'], // Magenta
-    ['#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8'], // Cyan
-    ['#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8', '#FFD6E8'],
+    ['#99DAFF', '#FFD6E8', '#E0E0E0', '#FFD6E8', '#FFD6E8', '#FFD6E8'], // Magenta
+    ['#FFD6E8', '#E0E0E0', '#FFD6E8', '#FFD6E8', '#E0E0E0', '#E0E0E0'], // Cyan
+    ['#E0E0E0', '#FFD6E8', '#E0E0E0', '#FFD6E8', '#FFD6E8', '#FFD6E8'],
     ['#FFD6E8', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0'],
     ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0'],
     ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0'],
-    ['#E0E0E0', '#E0E0E0', '#99DAFF', '#99DAFF', '#99DAFF', '#99DAFF'],
+    ['#E0E0E0', '#E0E0E0', '#99DAFF', '#E0E0E0', '#99DAFF', '#99DAFF'],
     ['#74E792', '#99DAFF', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0'],
     ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0', '#E0E0E0'],
-    ['#E0E0E0', '#99DAFF', '#99DAFF', '#FFD6E8', '#FFD6E8', '#FFD6E8'],
+    ['#E0E0E0', '#99DAFF', '#99DAFF', '#FFD6E8', '#FFD6E8', '#E0E0E0'],
     ['#99DAFF', '#FFD6E8', '#FFD6E8', '#FFD6E8', '#99DAFF', '#FFD6E8']
   ];
 
@@ -225,7 +225,6 @@ const App = () => {
     }}
   />
 </div>
-// App.js의 return문 내부 맨 아래에 추가
 <div 
   style={{
     position: 'absolute',
