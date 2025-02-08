@@ -1,0 +1,8 @@
+/* public/newtab.css */
+
+/* 브라우저 기본 마진/패딩 제거 및 전체 높이 사용 */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
