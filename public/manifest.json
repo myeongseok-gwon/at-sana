@@ -6,6 +6,11 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html" 
   },
+  "icons": {
+    "16": "favicon/Icon_16.png",
+    "48": "favicon/Icon_48.png",
+    "128": "favicon/Icon_128.png"
+  },
   "permissions": [
     "history",
     "tabs"
@@ -15,7 +20,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["images/*.png"],
+      "resources": ["images/*.png","favicon/*"],
       "matches": ["<all_urls>"]
     }
   ]

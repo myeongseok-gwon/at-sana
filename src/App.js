@@ -197,7 +197,7 @@ const App = () => {
               <div style={titleStyle}>Focus</div>
               <Graybox1
               title="Peak Duration" subtitle="0'32''" />
-              <Graybox2 title="Level" imageSrc={starImageBase64} altText="level" overlayText="5" />
+              <Graybox2 title="Level" imageSrc={starImageBase64} altText="level" overlayText="17" />
             </BorderBox>
             <BorderBox>
               <div style={titleStyle}>Top Visited</div>
