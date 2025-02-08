@@ -10,16 +10,7 @@ import Graybox1 from './components/Graybox1';
 import Graybox2 from './components/Graybox2';
 import { starImageBase64, gifBase64, headerBase64 } from './assets/base64';
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-// import OpenAI from "openai";
-
 const App = () => {
-  const apiKey = process.env.REACT_APP_GOOGLE_GENERATIVE_AI_KEY;
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-  const [keywordData, setKeywordData] = useState([]);
 
   const sampleData = [
     ['#E0E0E0', '#E0E0E0', '#E0E0E0', '#74E792', '#74E792', '#74E792'], // Green
@@ -43,42 +34,21 @@ const App = () => {
     ['#99DAFF', '#99DAFF', '#99DAFF', '#99DAFF', '#99DAFF', '#E0E0E0'],
   ];
 
+
+  const [keywordData, setKeywordData] = useState([]);
+
   useEffect(() => {
     const fetchHistory = () => {
       if (chrome && chrome.history) {
-        chrome.history.search({ text: '', startTime: 0, maxResults: 20 }, async (results) => {
-          const historyData = results.map(item => ({ url: item.url, title: item.title || item.url }));
-
-          // Send data to Gemini API
-          const prompt = `Analyze the following browser history. Based on frequency, uniqueness of the topic, and content relevance, filter out unnecessary items. Provide 5 main topics with their summary and categorize them into: 0 (Development), 1 (Lifestyle), or 2 (Entertainment).
-
-          Data:
-          ${JSON.stringify(historyData, null, 2)}
-
-          Respond in the following JSON format:
-          [
-            {"title": "", "summary": "", "category": 0},
-            {"title": "", "summary": "", "category": 1},
-            {"title": "", "summary": "", "category": 2},
-            {"title": "", "summary": "", "category": 1},
-            {"title": "", "summary": "", "category": 2}
-          ]`;
-
-          try {
-            const result = await model.generateContent(prompt);
-            let content = result.response.text();
-
-            // ✅ Strip code block wrappers (```json ... ```)
-            content = content.replace(/```json|```/g, '').trim();
-
-            // ✅ Now safely parse the cleaned JSON
-            const processedData = JSON.parse(content);
-            console.log(content);
-            console.log(processedData);
-            setKeywordData(processedData);
-          } catch (error) {
-            console.error("Error fetching data from Gemini:", error);
-          }
+        chrome.history.search({ text: '', startTime: 0, maxResults: 10 }, (results) => {
+          const processedData = results.slice(0, 5).map((item, index) => ({
+            iconText: item.title ? item.title.charAt(0) : 'N',
+            title: item.title || item.url,
+            label: `Category: ${['Development', 'Lifestyle', 'Entertainment'][index % 3]}`,
+            description: `Auto-generated summary for ${item.title || item.url}.`,
+            category: index % 3
+          }));
+          setKeywordData(processedData);
         });
       }
     };
@@ -161,11 +131,62 @@ const App = () => {
     objectFit: 'cover',        // 이미지가 원을 가득 채우도록 설정
     border: '2px solid #ccc'   // 테두리 추가 (선택 사항)
   };
-  
+  const overlayTextStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    color: 'var(--Background-ui-background, #FFF)',
+    textAlign: 'center',
+    fontFamily: 'IBM Plex Serif',
+    fontSize: '32px',
+    fontStyle: 'normal',
+    fontWeight: 700,
+    lineHeight: '40px',
+    color: 'black'
+  };
 
   return (
     <div>
-      <img src={headerBase64} alt="Header" />
+      <div
+        style={{
+          position: "relative", // 부모 컨테이너를 relative로 설정
+          marginTop: "100px",
+          marginLeft: "35px",
+          display: "inline-block" // 이미지 크기에 맞게 영역 유지
+        }}
+      >
+      {/* 헤더 이미지 위에 올라갈 텍스트 */}
+      <div style={{
+        position: "absolute",
+        top: "50%",  // 이미지를 기준으로 중앙 배치
+        left: "50%",
+        width: "100%",
+        transform: "translate(-50%, -50%)", // 정확한 중앙 정렬
+        color: "var(--Tag-Purple-text, #6929C4)",
+        textAlign: "center",
+        fontFamily: "IBM Plex Serif",
+        fontSize: "55px",
+        fontWeight: 600,
+        lineHeight: "40px",
+        zIndex: 10, // 이미지보다 위로 배치
+        paddingBottom: '12px'
+      }}>
+        Great Day, Sana!
+      </div>
+
+  {/* 헤더 이미지 */}
+  <img
+    src={headerBase64}
+    alt="Header"
+    style={{
+      width: "100%", // 전체 너비로 설정 (필요에 따라 조정 가능)
+      display: "block",
+      zIndex: 1 // 기본적으로 뒤에 위치
+    }}
+  />
+</div>
+
       <div style={bookmarksContainerStyle}>
         <Bookmark isActive={true} label="MAIN" />
         <Bookmark isActive={false} label="ANALYSIS" />
@@ -177,7 +198,8 @@ const App = () => {
           <div style={column1Style}>
             <BorderBox>
               <div style={titleStyle}>Focus</div>
-              <Graybox1 title="Peak Duration" subtitle="0'32''" />
+              <Graybox1
+              title="Peak Duration" subtitle="0'32''" />
               <Graybox2 title="Level" imageSrc={starImageBase64} altText="level" overlayText="5" />
             </BorderBox>
             <BorderBox>
@@ -188,7 +210,11 @@ const App = () => {
                 <img src={starImageBase64}s alt="Visited 3" style={circleImageStyle} />
               </div>
             </BorderBox>
-            <img src={gifBase64} alt="Animation" style={{ width: '100%', height: 'auto' }} />
+            <img src={gifBase64} alt="Animation" style={{
+              width: '100%', height: 'auto',
+              borderRadius: '5px',
+              border: '1px solid var(--Accessibility-Black-in-light-themes, #000)',
+              background: 'var(--Background-ui-background, #FFF)'}} />
           </div>
 
           <div style={column2Style}>
@@ -210,10 +236,10 @@ const App = () => {
                 {keywordData.map((item, index) => (
                   <KeywordCard
                     key={index}
-                    iconText={['D', 'L', 'E'][item.category]}  // Set based on category
+                    iconText={item.iconText}
                     title={item.title}
-                    label={`Category: ${['Development', 'Lifestyle', 'Entertainment'][item.category]}`}
-                    description={item.summary}
+                    label={item.label}
+                    description={item.description}
                   />
                 ))}
               </div>
