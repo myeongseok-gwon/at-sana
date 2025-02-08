@@ -233,9 +233,9 @@ const App = () => {
                 {keywordData.map((item, index) => (
                   <KeywordCard
                     key={index}
-                    iconText={item.iconText}
+                    iconText={['D', 'L', 'E'][item.category]}  // Set based on category
                     title={item.title}
-                    label={item.label}
+                    label={`Category: ${['Development', 'Lifestyle', 'Entertainment'][item.category]}`}
                     description={item.description}
                   />
                 ))}
